@@ -1,0 +1,8 @@
+[Unit]
+Description=CUPS Scheduler
+
+[Path]
+PathExists=/system/usr/root/var/cache/cups/org.cups.cupsd
+
+[Install]
+WantedBy=multi-user.target

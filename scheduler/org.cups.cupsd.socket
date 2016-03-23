@@ -1,0 +1,8 @@
+[Unit]
+Description=CUPS Scheduler
+
+[Socket]
+ListenStream=/system/usr/root/var/run/cups/cups.sock
+
+[Install]
+WantedBy=sockets.target
