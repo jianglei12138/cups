@@ -34,7 +34,7 @@ INSTALLSTATIC=
 
 # flags for C++ compiler:
 CFLAGS=""
-LDFLAGS="-Wl,-rpath,${exec_prefix}/lib"
+LDFLAGS=""
 LIBS="  -lz -pthread -lm  -liconv  -lz"
 
 # Check for local invocation...

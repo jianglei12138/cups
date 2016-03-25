@@ -495,14 +495,14 @@
  * Various scripting languages...
  */
 
-/* #undef HAVE_JAVA */
-#define CUPS_JAVA ""
+#define HAVE_JAVA 1
+#define CUPS_JAVA "/usr/bin/java"
 #define HAVE_PERL 1
 #define CUPS_PERL "/usr/bin/perl"
 /* #undef HAVE_PHP */
 #define CUPS_PHP ""
 #define HAVE_PYTHON 1
-#define CUPS_PYTHON "/home/jianglei/arm-linux-androideabi-4.6/bin/python"
+#define CUPS_PYTHON "/usr/bin/python"
 
 
 /*

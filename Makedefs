@@ -18,14 +18,14 @@
 #
 
 AR		=	/usr/bin/ar
-AWK		=	mawk
+AWK		=	gawk
 CC		=	 arm-linux-androideabi-gcc
 CHMOD		=	/bin/chmod
 CXX		=	 arm-linux-androideabi-c++
 DSO		=	$(CC)
 DSOXX		=	$(CXX)
 GZIP		=	/bin/gzip
-INSTALL		=	/home/jianglei/Desktop/cross/cups-2.1.3-android/install-sh
+INSTALL		=	/home/lei/桌面/cups/install-sh
 LD		=	/usr/bin/ld
 LIBTOOL		=	
 LN		=	/bin/ln -sf
@@ -135,14 +135,14 @@ CXXLIBS		=
 DBUS_NOTIFIER	=	
 DBUS_NOTIFIERLIBS =	
 DNSSD_BACKEND	=	
-DSOFLAGS	=	-L../cups -Wl,-rpath,${exec_prefix}/lib  -Wl,-soname,`basename $@` -shared $(OPTIM)
+DSOFLAGS	=	-L../cups  -Wl,-soname,`basename $@` -shared $(OPTIM)
 DSOLIBS		=	$(LIBZ) $(COMMONLIBS)
 DNSSDLIBS	=	
 IPPFIND_BIN	=	
 IPPFIND_MAN	=	
 LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
 			-L../scheduler  \
-			 -Wl,-rpath,${exec_prefix}/lib  -fPIE -pie $(OPTIM)
+			  -fPIE -pie $(OPTIM)
 LINKCUPS	=	-lcups $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
 LINKCUPSIMAGE	=	-lcupsimage
 LIBS		=	$(LINKCUPS) $(COMMONLIBS)
