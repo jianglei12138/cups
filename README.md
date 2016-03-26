@@ -54,7 +54,7 @@ Then just make
 make
 ```
 
- ####5.Make install
+####5.Make install
 
 make install need root permission，so you must under sudo before you make install.
 
@@ -112,4 +112,4 @@ Help pager:
 
 
 
-From now on, you could add some printer, but you maybe need other cups-filters to print successfully.
+From now on, you could add some printer, but you maybe need other cups-filters to print successfully. CUPS-filters could be found in my [repository](https://github.com/jianglei12138/cups-filters) 
