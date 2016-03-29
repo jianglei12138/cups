@@ -33,6 +33,7 @@ then you'll be able to find you toolchian under `/tmp` folder. Just put it where
 
 - get the lcoale support library and library from my another  [repositories](https://github.com/jianglei12138/liblocale), then put the header locale12138.h under toolchain-folder/sysroot/usr/include and the shared librari liblocale.so to toolchain-folder/sysroot/usr/lib
 - add toolchain bin path to your environment variable
+- if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
 
 ####3.Configrue cups
 
