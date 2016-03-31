@@ -64,7 +64,7 @@
  */
 
 #define CUPS_DEFAULT_BROWSING 1
-#define CUPS_DEFAULT_BROWSE_LOCAL_PROTOCOLS ""
+#define CUPS_DEFAULT_BROWSE_LOCAL_PROTOCOLS "dnssd"
 #define CUPS_DEFAULT_DEFAULT_SHARED 1
 
 
@@ -381,7 +381,7 @@
  * Do we have Avahi for DNS Service Discovery (aka Bonjour)?
  */
 
-/* #undef HAVE_AVAHI */
+#define HAVE_AVAHI 1
 
 
 /*
@@ -495,14 +495,14 @@
  * Various scripting languages...
  */
 
-#define HAVE_JAVA 1
-#define CUPS_JAVA "/usr/bin/java"
+/* #undef HAVE_JAVA */
+#define CUPS_JAVA ""
 #define HAVE_PERL 1
 #define CUPS_PERL "/usr/bin/perl"
 /* #undef HAVE_PHP */
 #define CUPS_PHP ""
 #define HAVE_PYTHON 1
-#define CUPS_PYTHON "/usr/bin/python"
+#define CUPS_PYTHON "/home/jianglei/arm-linux-androideabi-4.6/bin/python"
 
 
 /*

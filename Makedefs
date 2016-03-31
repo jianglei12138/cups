@@ -18,14 +18,14 @@
 #
 
 AR		=	/usr/bin/ar
-AWK		=	gawk
+AWK		=	mawk
 CC		=	 arm-linux-androideabi-gcc
 CHMOD		=	/bin/chmod
 CXX		=	 arm-linux-androideabi-c++
 DSO		=	$(CC)
 DSOXX		=	$(CXX)
 GZIP		=	/bin/gzip
-INSTALL		=	/home/lei/桌面/cups/install-sh
+INSTALL		=	/home/jianglei/Desktop/cups/install-sh
 LD		=	/usr/bin/ld
 LIBTOOL		=	
 LN		=	/bin/ln -sf
@@ -134,12 +134,12 @@ CXXFLAGS	=
 CXXLIBS		=	
 DBUS_NOTIFIER	=	
 DBUS_NOTIFIERLIBS =	
-DNSSD_BACKEND	=	
+DNSSD_BACKEND	=	dnssd
 DSOFLAGS	=	-L../cups  -Wl,-soname,`basename $@` -shared $(OPTIM)
 DSOLIBS		=	$(LIBZ) $(COMMONLIBS)
-DNSSDLIBS	=	
-IPPFIND_BIN	=	
-IPPFIND_MAN	=	
+DNSSDLIBS	=	-lavahi-client -lavahi-core -lavahi-common
+IPPFIND_BIN	=	ippfind
+IPPFIND_MAN	=	ippfind.$(MAN1EXT)
 LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
 			-L../scheduler  \
 			  -fPIE -pie $(OPTIM)

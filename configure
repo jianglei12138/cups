@@ -9025,20 +9025,16 @@ IPPFIND_MAN=""
 if test "x$PKGCONFIG" != x -a x$enable_avahi != xno -a x$uname != xDarwin; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Avahi" >&5
 $as_echo_n "checking for Avahi... " >&6; }
-	if $PKGCONFIG --exists avahi-client; then
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-		CFLAGS="$CFLAGS `$PKGCONFIG --cflags avahi-client`"
-		DNSSDLIBS="`$PKGCONFIG --libs avahi-client`"
+		#CFLAGS="$CFLAGS `$PKGCONFIG --cflags avahi-client`"
+		DNSSDLIBS="-lavahi-client -lavahi-core -lavahi-common"
 		DNSSD_BACKEND="dnssd"
 		IPPFIND_BIN="ippfind"
 		IPPFIND_MAN="ippfind.\$(MAN1EXT)"
 		$as_echo "#define HAVE_AVAHI 1" >>confdefs.h
 
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
 fi
 
 if test "x$DNSSD_BACKEND" = x -a x$enable_dnssd != xno; then
