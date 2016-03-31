@@ -34,6 +34,7 @@ then you'll be able to find you toolchian under `/tmp` folder. Just put it where
 - get the lcoale support library and library from my another  [repositories](https://github.com/jianglei12138/liblocale), then put the header locale12138.h under toolchain-folder/sysroot/usr/include and the shared librari liblocale.so to toolchain-folder/sysroot/usr/lib
 - add toolchain bin path to your environment variable
 - if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
+- if you want to enable avahi, you can put avahi header and library into toolchain sysroot. And libavahi-common,libavahi-core,libavahi-client for android could be found in my resposity.
 
 ####3.Configrue cups
 
@@ -43,7 +44,7 @@ Just cd cups folder and configure:
 ./configure --host=arm-linux-androideabi  --disable-dbus --prefix=/system/usr/root --with-cups-user=system --with-cups-group=system --with-system-groups=root
 ```
 
-I put all aim files to `/system/usr/root` which in android system, so i used `—prefix` .You maybe found some error during configure ,but you can find all need libraries in my repositories. Then add liblocale support in Makedefs file `COMMONLIBS = -pthread -lm  -liconv  -lz -llocale`
+I put all aim files to `/system/usr/root` which in android system, so i used `--prefix` .You maybe found some error during configure ,but you can find all need libraries in my repositories. Then add liblocale support in Makedefs file `COMMONLIBS = -pthread -lm  -liconv  -lz -llocale`
 
 ![locale](art/locale.png)
 
@@ -101,7 +102,7 @@ Administration page, and the administrator is root and password is whatever exce
 
 
 
-Add Printer Pagr:
+Add Printer Page:
 
 ![test](art/test3.png)
 
