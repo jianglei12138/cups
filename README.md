@@ -115,3 +115,7 @@ Help pager:
 
 
 From now on, you could add some printer, but you maybe need other cups-filters to print successfully. CUPS-filters could be found in my [repository](https://github.com/jianglei12138/cups-filters) 
+
+####9.Attention!
+
+This cound not be compile on OSX. I cross compile on Ubuntu16.04
