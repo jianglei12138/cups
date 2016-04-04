@@ -106,7 +106,9 @@ Add Printer Page:
 
 ![test](art/test3.png)
 
+if you enable avahi or dns-sd support, you can find your network printers like this
 
+![finder](art/finder.png)
 
 Help pager:
 
