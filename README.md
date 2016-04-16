@@ -31,7 +31,7 @@ then you'll be able to find you toolchian under `/tmp` folder. Just put it where
 - modify the `locale.h` under  toolchain-folder/sysroot/usr/include, change `if 1` to `if 0` ![locale.h](art/header.png)
 
 
-- get the lcoale support library and library from my another  [repositories](https://github.com/jianglei12138/liblocale), then put the header locale12138.h under toolchain-folder/sysroot/usr/include and the shared librari liblocale.so to toolchain-folder/sysroot/usr/lib
+- get the lcoale support library and library from my another  [repositories](https://github.com/jianglei12138/liblocale), then put the header locale12138.h under toolchain-folder/sysroot/usr/include and the shared librari liblocale.so to toolchain-folder/sysroot/usr/lib(I have changed some files in liblocale, so pay attention)
 - add toolchain bin path to your environment variable
 - if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
 - if you want to enable avahi, you can put avahi header and library into toolchain sysroot. And libavahi-common,libavahi-core,libavahi-client for android could be found in my resposity.
