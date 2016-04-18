@@ -27,7 +27,7 @@
 #  include <stdarg.h>
 #  include <ctype.h>
 #  include <errno.h>
-#  include <locale12138.h>
+#  include <locale.h>
 #  include <time.h>
 
 #  include "config.h"
