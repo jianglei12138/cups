@@ -88,7 +88,7 @@ LIBGSSAPI	=
 LIBMALLOC	=	
 LIBMXML		=	
 LIBPAPER	=	
-LIBUSB		=	
+LIBUSB		=	-lusb
 LIBWRAP		=	
 LIBZ		=	-lz
 

@@ -663,8 +663,7 @@
  * Do we have libusb?
  */
 
-/* #undef HAVE_LIBUSB */
-
+#define HAVE_LIBUSB 1
 
 /*
  * Do we have libwrap and tcpd.h?
