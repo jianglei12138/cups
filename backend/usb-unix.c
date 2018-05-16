@@ -23,7 +23,7 @@
 
 #include <sys/select.h>
 
-
+#define tcdrain(fd) ioctl(fd, TCSBRK, 1)
 /*
  * Local functions...
  */

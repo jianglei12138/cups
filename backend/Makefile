@@ -35,7 +35,7 @@ UBACKENDS =	\
 		snmp \
 		socket
 ULBACKENDS =	\
-		
+		usb
 UNITTESTS =	\
 		test1284 \
 		testbackend \
@@ -59,7 +59,7 @@ OBJS	=	\
 		test1284.o \
 		testbackend.o \
 		testsupplies.o \
-
+		usb.o
 
 
 #
@@ -295,6 +295,16 @@ socket:	socket.o ../cups/$(LIBCUPS) libbackend.a
 	echo Linking $@...
 	$(CC) $(LDFLAGS) -o socket socket.o libbackend.a $(LIBS)
 
+
+#
+# usb
+#
+
+usb:	usb.o ../cups/$(LIBCUPS) libbackend.a
+	echo Linking $@...
+	$(CC) $(ARCHFLAGS) $(LDFLAGS) -o usb usb.o libbackend.a $(LIBUSB) \
+		$(BACKLIBS) $(LIBS)
+usb.o:	usb.c usb-darwin.c usb-libusb.c usb-unix.c
 
 
 #
