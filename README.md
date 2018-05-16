@@ -1,8 +1,8 @@
-##How to build cups for android
+## How to build cups for android
 
 First of all, forgive my poor English. This is a guide to build cups for android platform, I have modified some files of cups project, to build cups successfully, you should do like this:
 
-####1.Get source code
+#### 1.Get source code
 
 source code should use what i provide in this repository, the cups version is 2.1.3.  Just use git clone:
 
@@ -12,7 +12,7 @@ git clone https://github.com/jianglei12138/cups.git
 
 or download this code by click the download button.
 
-####2.Configure you environment
+#### 2.Configure you environment
 
 It is suggest to use cross compiler toolchain which exported by NDK.
 
@@ -36,7 +36,7 @@ then you'll be able to find you toolchian under `/tmp` folder. Just put it where
 - if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
 - if you want to enable avahi, you can put avahi header and library into toolchain sysroot. And libavahi-common,libavahi-core,libavahi-client for android could be found in my resposity.
 
-####3.Configrue cups
+#### 3.Configrue cups
 
 Just cd cups folder and configure:
 
@@ -48,7 +48,7 @@ I put all aim files to `/system/usr/root` which in android system, so i used `--
 
 ![locale](art/locale.png)
 
-####4.Make
+#### 4.Make
 
 Then just make
 
@@ -56,7 +56,7 @@ Then just make
 make
 ```
 
-####5.Make install
+#### 5.Make install
 
 make install need root permission，so you must under sudo before you make install.
 
@@ -66,7 +66,7 @@ Then make install
 make install
 ```
 
-####6.Make all ready
+#### 6.Make all ready
 
 + push liblocale.so to android system lib 
 
@@ -80,13 +80,13 @@ make install
 
 + copy libraries under cups/lib to /system/lib
 
-####7.start cupsd
+#### 7.start cupsd
 
 You can start cupsd by adb shell or you can install an app terminal for android. And all this should be under root.(The mime in the picture was i added to debug).
 
 ![CUPSD](art/cupsd.png)
 
-####8.Test
+#### 8.Test
 
 Now, you could be able to open brower to see if the cups running successfully.
 
@@ -118,6 +118,6 @@ Help pager:
 
 From now on, you could add some printer, but you maybe need other cups-filters to print successfully. CUPS-filters could be found in my [repository](https://github.com/jianglei12138/cups-filters) 
 
-####9.Attention!
+#### 9.Attention!
 
 This cound not be compile on OSX. I cross compile on Ubuntu16.04
