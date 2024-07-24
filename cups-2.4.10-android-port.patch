@@ -1,0 +1,510 @@
+commit cf2c2e6e2140e04cbd99f33406bc5774fafa169d
+Author: jianglei <jianglei@bigo.sg>
+Date:   Wed Jun 19 16:32:19 2024 +0800
+
+    port to android system
+
+diff --git a/cups/language.c b/cups/language.c
+index 6d9474e..bac54e3 100644
+--- a/cups/language.c
++++ b/cups/language.c
+@@ -439,6 +439,237 @@ cupsLangFree(cups_lang_t *lang)		/* I - Language to free */
+ }
+ 
+ 
++/* Specification.  */
++#include <langinfo.h>
++#if REPLACE_NL_LANGINFO
++/* Override nl_langinfo with support for added nl_item values.  */
++# include <locale.h>
++# include <string.h>
++# undef nl_langinfo
++char *
++rpl_nl_langinfo (nl_item item)
++{
++  switch (item)
++    {
++# if GNULIB_defined_CODESET
++    case CODESET:
++      {
++        const char *locale;
++        static char buf[2 + 10 + 1];
++        locale = setlocale (LC_CTYPE, NULL);
++        if (locale != NULL && locale[0] != '\0')
++          {
++            /* If the locale name contains an encoding after the dot, return
++               it.  */
++            const char *dot = strchr (locale, '.');
++            if (dot != NULL)
++              {
++                const char *modifier;
++                dot++;
++                /* Look for the possible @... trailer and remove it, if any.  */
++                modifier = strchr (dot, '@');
++                if (modifier == NULL)
++                  return dot;
++                if (modifier - dot < sizeof (buf))
++                  {
++                    memcpy (buf, dot, modifier - dot);
++                    buf [modifier - dot] = '\0';
++                    return buf;
++                  }
++              }
++          }
++        return "";
++      }
++# endif
++# if GNULIB_defined_T_FMT_AMPM
++    case T_FMT_AMPM:
++      return "%I:%M:%S %p";
++# endif
++# if GNULIB_defined_ERA
++    case ERA:
++      /* The format is not standardized.  In glibc it is a sequence of strings
++         of the form "direction:offset:start_date:end_date:era_name:era_format"
++         with an empty string at the end.  */
++      return "";
++    case ERA_D_FMT:
++      /* The %Ex conversion in strftime behaves like %x if the locale does not
++         have an alternative time format.  */
++      item = D_FMT;
++      break;
++    case ERA_D_T_FMT:
++      /* The %Ec conversion in strftime behaves like %c if the locale does not
++         have an alternative time format.  */
++      item = D_T_FMT;
++      break;
++    case ERA_T_FMT:
++      /* The %EX conversion in strftime behaves like %X if the locale does not
++         have an alternative time format.  */
++      item = T_FMT;
++      break;
++    case ALT_DIGITS:
++      /* The format is not standardized.  In glibc it is a sequence of 10
++         strings, appended in memory.  */
++      return "\0\0\0\0\0\0\0\0\0\0";
++# endif
++# if GNULIB_defined_YESEXPR || !FUNC_NL_LANGINFO_YESEXPR_WORKS
++    case YESEXPR:
++      return "^[yY]";
++    case NOEXPR:
++      return "^[nN]";
++# endif
++    default:
++      break;
++    }
++  return nl_langinfo (item);
++}
++#else
++/* Provide nl_langinfo from scratch.  */
++# if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
++/* Native Windows platforms.  */
++#  define WIN32_LEAN_AND_MEAN  /* avoid including junk */
++#  include <windows.h>
++#  include <stdio.h>
++# else
++/* An old Unix platform without locales, such as Linux libc5 or BeOS.  */
++# endif
++# include <locale.h>
++char *
++nl_langinfo (nl_item item)
++{
++  switch (item)
++    {
++    /* nl_langinfo items of the LC_CTYPE category */
++    case CODESET:
++# if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
++      {
++        static char buf[2 + 10 + 1];
++        /* The Windows API has a function returning the locale's codepage as
++           a number.  */
++        sprintf (buf, "CP%u", GetACP ());
++        return buf;
++      }
++# elif defined __BEOS__
++      return "UTF-8";
++# else
++      return "ISO-8859-1";
++# endif
++    /* nl_langinfo items of the LC_NUMERIC category */
++    case RADIXCHAR:
++      return localeconv () ->decimal_point;
++    case THOUSEP:
++      return localeconv () ->thousands_sep;
++    /* nl_langinfo items of the LC_TIME category.
++       TODO: Really use the locale.  */
++    case D_T_FMT:
++    case ERA_D_T_FMT:
++      return "%a %b %e %H:%M:%S %Y";
++    case D_FMT:
++    case ERA_D_FMT:
++      return "%m/%d/%y";
++    case T_FMT:
++    case ERA_T_FMT:
++      return "%H:%M:%S";
++    case T_FMT_AMPM:
++      return "%I:%M:%S %p";
++    case AM_STR:
++      return "AM";
++    case PM_STR:
++      return "PM";
++    case DAY_1:
++      return "Sunday";
++    case DAY_2:
++      return "Monday";
++    case DAY_3:
++      return "Tuesday";
++    case DAY_4:
++      return "Wednesday";
++    case DAY_5:
++      return "Thursday";
++    case DAY_6:
++      return "Friday";
++    case DAY_7:
++      return "Saturday";
++    case ABDAY_1:
++      return "Sun";
++    case ABDAY_2:
++      return "Mon";
++    case ABDAY_3:
++      return "Tue";
++    case ABDAY_4:
++      return "Wed";
++    case ABDAY_5:
++      return "Thu";
++    case ABDAY_6:
++      return "Fri";
++    case ABDAY_7:
++      return "Sat";
++    case MON_1:
++      return "January";
++    case MON_2:
++      return "February";
++    case MON_3:
++      return "March";
++    case MON_4:
++      return "April";
++    case MON_5:
++      return "May";
++    case MON_6:
++      return "June";
++    case MON_7:
++      return "July";
++    case MON_8:
++      return "August";
++    case MON_9:
++      return "September";
++    case MON_10:
++      return "October";
++    case MON_11:
++      return "November";
++    case MON_12:
++      return "December";
++    case ABMON_1:
++      return "Jan";
++    case ABMON_2:
++      return "Feb";
++    case ABMON_3:
++      return "Mar";
++    case ABMON_4:
++      return "Apr";
++    case ABMON_5:
++      return "May";
++    case ABMON_6:
++      return "Jun";
++    case ABMON_7:
++      return "Jul";
++    case ABMON_8:
++      return "Aug";
++    case ABMON_9:
++      return "Sep";
++    case ABMON_10:
++      return "Oct";
++    case ABMON_11:
++      return "Nov";
++    case ABMON_12:
++      return "Dec";
++    case ERA:
++      return "";
++    case ALT_DIGITS:
++      return "\0\0\0\0\0\0\0\0\0\0";
++    /* nl_langinfo items of the LC_MONETARY category
++       TODO: Really use the locale. */
++    case CRNCYSTR:
++      return "-";
++    /* nl_langinfo items of the LC_MESSAGES category
++       TODO: Really use the locale. */
++    case YESEXPR:
++      return "^[yY]";
++    case NOEXPR:
++      return "^[nN]";
++    default:
++      return "";
++    }
++}
++#endif
+ /*
+  * 'cupsLangGet()' - Get a language.
+  */
+diff --git a/cups/thread.c b/cups/thread.c
+index 066f8e2..af6be86 100644
+--- a/cups/thread.c
++++ b/cups/thread.c
+@@ -151,11 +151,11 @@ _cupsRWUnlock(_cups_rwlock_t *rwlock)	/* I - Reader/writer lock */
+  * '_cupsThreadCancel()' - Cancel (kill) a thread.
+  */
+ 
+-void
+-_cupsThreadCancel(_cups_thread_t thread)/* I - Thread ID */
+-{
+-  pthread_cancel(thread);
+-}
++// void
++// _cupsThreadCancel(_cups_thread_t thread)/* I - Thread ID */
++// {
++//   pthread_cancel(thread);
++// }
+ 
+ 
+ /*
+diff --git a/scheduler/auth.c b/scheduler/auth.c
+index d0430b4..c80fc78 100644
+--- a/scheduler/auth.c
++++ b/scheduler/auth.c
+@@ -60,6 +60,50 @@ typedef struct sockpeercred cupsd_ucred_t;
+ #  include <snapd-glib/snapd-glib.h>
+ #endif /* HAVE_LIBSNAPDGLIB */
+ 
++static void android_setup_pwd(struct passwd* pw) {
++       char const* result = "@TERMUX_PREFIX@/bin/login";
++       if (result == NULL || access(result, /*X_OK*/1) == -1) {
++               pw->pw_shell = "@TERMUX_PREFIX@/bin/bash";
++       } else {
++               pw->pw_shell = (char*) result;
++       }
++       pw->pw_dir = "/tmp/";
++       pw->pw_passwd = "*";
++#ifdef __LP64__
++       pw->pw_gecos = ""; /* Avoid NULL field. */
++#endif
++}
++
++static struct passwd* android_polyfill_getpwuid(uid_t t) {
++       struct passwd* pw = getpwuid(t);
++       if (pw == NULL) return NULL;
++       android_setup_pwd(pw);
++       return pw;
++}
++
++static struct passwd* android_polyfill_getpwnam(const char* name) {
++       struct passwd* pw = getpwnam(name);
++       if (pw == NULL) return NULL;
++       android_setup_pwd(pw);
++       return pw;
++}
++
++static int android_polyfill_getpwuid_r(uid_t uid,
++                                       struct passwd *pwd,
++                                       char *buffer,
++                                       size_t bufsize,
++                                       struct passwd **result) {
++       int ret = getpwuid_r(uid, pwd, buffer, bufsize, result);
++       if (ret != 0) return ret;
++       android_setup_pwd(pwd);
++       return 0;
++}
++
++#define getpwnam android_polyfill_getpwnam
++#define getpwuid android_polyfill_getpwuid
++#define getpwuid_r android_polyfill_getpwuid_r
++static void endpwent(void) { /* Do nothing. */ }
++
+ 
+ /*
+  * Local functions...
+@@ -686,7 +730,7 @@ cupsdAuthorize(cupsd_client_t *con)	/* I - Client connection */
+       * client...
+       */
+ 
+-      pass = crypt(password, pw->pw_passwd);
++      pass = "*"; // crypt(password, pw->pw_passwd);
+ 
+       if (!pass || strcmp(pw->pw_passwd, pass))
+       {
+@@ -1133,136 +1177,7 @@ cupsdCheckGroup(
+     struct passwd *user,		/* I - System user info */
+     const char    *groupname)		/* I - Group name */
+ {
+-  int		i;			/* Looping var */
+-  struct group	*group;			/* Group info */
+-  gid_t		groupid;		/* ID of named group */
+-#ifdef HAVE_MBR_UID_TO_UUID
+-  uuid_t	useruuid,		/* UUID for username */
+-		groupuuid;		/* UUID for groupname */
+-  int		is_member;		/* True if user is a member of group */
+-#endif /* HAVE_MBR_UID_TO_UUID */
+-
+-
+-  cupsdLogMessage(CUPSD_LOG_DEBUG2, "cupsdCheckGroup(username=\"%s\", user=%p, groupname=\"%s\")", username, (void *)user, groupname);
+-
+- /*
+-  * Validate input...
+-  */
+-
+-  if (!username || !groupname)
+-    return (0);
+-
+- /*
+-  * Check to see if the user is a member of the named group...
+-  */
+-
+-  group = getgrnam(groupname);
+-  endgrent();
+-
+-  if (group != NULL)
+-  {
+-   /*
+-    * Group exists, check it...
+-    */
+-
+-    groupid = group->gr_gid;
+-
+-    for (i = 0; group->gr_mem[i]; i ++)
+-    {
+-     /*
+-      * User appears in the group membership...
+-      */
+-
+-      if (!_cups_strcasecmp(username, group->gr_mem[i]))
+-	return (1);
+-    }
+-
+-#ifdef HAVE_GETGROUPLIST
+-   /*
+-    * If the user isn't in the group membership list, try the results from
+-    * getgrouplist() which is supposed to return the full list of groups a user
+-    * belongs to...
+-    */
+-
+-    if (user)
+-    {
+-      int	ngroups;		/* Number of groups */
+-#  ifdef __APPLE__
+-      int	groups[2048];		/* Groups that user belongs to */
+-#  else
+-      gid_t	groups[2048];		/* Groups that user belongs to */
+-#  endif /* __APPLE__ */
+-
+-      ngroups = (int)(sizeof(groups) / sizeof(groups[0]));
+-#  ifdef __APPLE__
+-      getgrouplist(username, (int)user->pw_gid, groups, &ngroups);
+-#  else
+-      getgrouplist(username, user->pw_gid, groups, &ngroups);
+-#endif /* __APPLE__ */
+-
+-      for (i = 0; i < ngroups; i ++)
+-        if ((int)groupid == (int)groups[i])
+-	  return (1);
+-    }
+-#endif /* HAVE_GETGROUPLIST */
+-  }
+-  else
+-    groupid = (gid_t)-1;
+-
+- /*
+-  * Group doesn't exist or user not in group list, check the group ID
+-  * against the user's group ID...
+-  */
+-
+-  if (user && groupid == user->pw_gid)
+     return (1);
+-
+-#ifdef HAVE_MBR_UID_TO_UUID
+- /*
+-  * Check group membership through macOS membership API...
+-  */
+-
+-  if (user && !mbr_uid_to_uuid(user->pw_uid, useruuid))
+-  {
+-    if (groupid != (gid_t)-1)
+-    {
+-     /*
+-      * Map group name to UUID and check membership...
+-      */
+-
+-      if (!mbr_gid_to_uuid(groupid, groupuuid))
+-        if (!mbr_check_membership(useruuid, groupuuid, &is_member))
+-	  if (is_member)
+-	    return (1);
+-    }
+-    else if (groupname[0] == '#')
+-    {
+-     /*
+-      * Use UUID directly and check for equality (user UUID) and
+-      * membership (group UUID)...
+-      */
+-
+-      if (!uuid_parse((char *)groupname + 1, groupuuid))
+-      {
+-        if (!uuid_compare(useruuid, groupuuid))
+-	  return (1);
+-	else if (!mbr_check_membership(useruuid, groupuuid, &is_member))
+-	  if (is_member)
+-	    return (1);
+-      }
+-
+-      return (0);
+-    }
+-  }
+-  else if (groupname[0] == '#')
+-    return (0);
+-#endif /* HAVE_MBR_UID_TO_UUID */
+-
+- /*
+-  * If we get this far, then the user isn't part of the named group...
+-  */
+-
+-  return (0);
+ }
+ 
+ 
+diff --git a/scheduler/conf.c b/scheduler/conf.c
+index 0d4bb6a..c791fd9 100644
+--- a/scheduler/conf.c
++++ b/scheduler/conf.c
+@@ -516,6 +516,8 @@ cupsdFreeAliases(cups_array_t *aliases)	/* I - Array of aliases */
+   cupsArrayDelete(aliases);
+ }
+ 
++static void endpwent(void) { /* Do nothing. */ }
++static void endgrent(void) { /* Do nothing. */ }
+ 
+ /*
+  * 'cupsdReadConfiguration()' - Read the cupsd.conf file.
+diff --git a/scheduler/ipp.c b/scheduler/ipp.c
+index 37623c5..762636f 100644
+--- a/scheduler/ipp.c
++++ b/scheduler/ipp.c
+@@ -29,6 +29,9 @@ extern int mbr_check_membership_by_id(uuid_t user, gid_t group, int* ismember);
+ #endif /* __APPLE__ */
+ 
+ 
++static void endpwent(void) { /* Do nothing. */ }
++static void endgrent(void) { /* Do nothing. */ }
++
+ /*
+  * Local functions...
+  */
+diff --git a/scheduler/policy.c b/scheduler/policy.c
+index 884e499..ab8b958 100644
+--- a/scheduler/policy.c
++++ b/scheduler/policy.c
+@@ -20,6 +20,8 @@
+  * Local functions...
+  */
+ 
++static void endpwent(void) { /* Do nothing. */ }
++static void endgrent(void) { /* Do nothing. */ }
+ static int	compare_ops(cupsd_location_t *a, cupsd_location_t *b);
+ static int	compare_policies(cupsd_policy_t *a, cupsd_policy_t *b);
+ static void	free_policy(cupsd_policy_t *p);
