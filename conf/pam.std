@@ -1,2 +1,0 @@
-auth	required	pam_unknown.so nodelay
-account	required	pam_unknown.so

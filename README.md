@@ -1,16 +1,16 @@
 ## How to build cups for android
 
-First of all, forgive my poor English. This is a guide to build cups for android platform, I have modified some files of cups project, to build cups successfully, you should do like this:
+This is a guide to build cups for android platform, I have modified some files of cups project, to build cups successfully, you should do like this:
 
 #### 1.Get source code
 
-source code should use what i provide in this repository, the cups version is 2.1.3.  Just use git clone:
+Just use git clone:
 
 ```shell
 git clone https://github.com/jianglei12138/cups.git
 ```
 
-or download this code by click the download button.
+or download cups-2.4.10-android-port.patch.
 
 #### 2.Configure you environment
 
@@ -19,7 +19,7 @@ It is suggest to use cross compiler toolchain which exported by NDK.
 In termial, just `cd` your NDK path (must in this folder) and input 
 
 ```shell
-./build/tools/make-standalone-toolchain.sh --arch=arm --platform=android-17
+./build/tools/make-standalone-toolchain.sh --arch=arm --platform=android-21
 ```
 
 just like this:
@@ -36,15 +36,17 @@ then you'll be able to find you toolchian under `/tmp` folder. Just put it where
 - if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
 - if you want to enable avahi, you can put avahi header and library into toolchain sysroot. And libavahi-common,libavahi-core,libavahi-client for android could be found in my resposity.
 
-#### 3.Configrue cups
+#### 3. Patch and configrue cups
 
-Just cd cups folder and configure:
+download cups-2.4.10 and apply patch (use patch command) **cups-2.4.10-android-port.patch**
+
+configure:
 
 ```shell
 ./configure --host=arm-linux-androideabi  --disable-dbus --prefix=/system/usr/root --with-cups-user=system --with-cups-group=system --with-system-groups=root
 ```
 
-I put all aim files to `/system/usr/root` which in android system, so i used `--prefix` .You maybe found some error during configure ,but you can find all need libraries in my repositories. Then add liblocale support in Makedefs file `COMMONLIBS = -pthread -lm  -liconv  -lz -llocale`
+I put all aim files to `/system/usr/root` which in android system, so i used `--prefix` .You maybe found some error during configure, but you can find all need libraries in my repositories. 
 
 ![locale](art/locale.png)
 
@@ -96,7 +98,7 @@ Home page:
 
 
 
-Administration page, and the administrator is root and password is whatever except null.
+Administration page, and the name and passowrd see patch code
 
 ![test](art/test2.png)
 
