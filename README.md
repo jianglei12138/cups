@@ -28,10 +28,6 @@ just like this:
 
 then you'll be able to find you toolchian under `/tmp` folder. Just put it where you like and unzip. Once your toolchain has ready, you need change some file.
 
-- (Do not do this) modify the `locale.h` under  toolchain-folder/sysroot/usr/include, change `if 1` to `if 0` ![locale.h](art/header.png)
-
-
-- get the lcoale support library and library from my another  [repositories](https://github.com/jianglei12138/liblocale), then put the header locale.h under toolchain-folder/sysroot/usr/include(override) and the shared library liblocale.so to toolchain-folder/sysroot/usr/lib
 - add toolchain bin path to your environment variable
 - if you want to enable dns_sd, you can put libdns_sd's header and library into toolchain sysroot. And libdns_sd for android could be found in my resposity.
 - if you want to enable avahi, you can put avahi header and library into toolchain sysroot. And libavahi-common,libavahi-core,libavahi-client for android could be found in my resposity.
@@ -46,9 +42,7 @@ configure:
 ./configure --host=arm-linux-androideabi  --disable-dbus --prefix=/system/usr/root --with-cups-user=system --with-cups-group=system --with-system-groups=root
 ```
 
-I put all aim files to `/system/usr/root` which in android system, so i used `--prefix` .You maybe found some error during configure, but you can find all need libraries in my repositories. 
-
-![locale](art/locale.png)
+I put all aim files to `/system/usr/root` which in android system, so I used `--prefix` .You maybe found some error during configure, but you can find all need libraries in my repositories. 
 
 #### 4.Make
 
@@ -69,13 +63,6 @@ make install
 ```
 
 #### 6.Make all ready
-
-+ push liblocale.so to android system lib 
-
-  ```shell
-  adb push liblocale /system/lib
-  ```
-
 
 + copy all the files to the android system. You can use adb push, but this will ignore some folder, so I suggest just put the zip file to the android system folder and install an app which named busybox (you'll get unzip command), and unzip the zip file to you corrent location. Anyway, you can copy aim files to sdcard and use RootExplorer copy them to the correct path, don't forget give correct promission.
 
