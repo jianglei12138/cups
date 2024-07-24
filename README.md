@@ -42,7 +42,7 @@ configure:
 ./configure --host=arm-linux-androideabi  --disable-dbus --prefix=/system/usr/root --with-cups-user=system --with-cups-group=system --with-system-groups=root
 ```
 
-I put all aim files to `/system/usr/root` which in android system, so I used `--prefix` .You maybe found some error during configure, but you can find all need libraries in my repositories. 
+we wannt push all files to android `/system/usr/root`,  so `--prefix` is necessary, you maybe found some deps error during configure, but can find all need libraries in my repositories. 
 
 #### 4.Make
 
@@ -109,4 +109,4 @@ From now on, you could add some printer, but you maybe need other cups-filters t
 
 #### 9.Attention!
 
-This cound not be compile on OSX. I cross compile on Ubuntu16.04
+Cross compile on MacOS wes not test. Recommand OS is Ubuntu or other linux distribution 
